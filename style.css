@@ -829,8 +829,7 @@ body.view-control-buttons .viewControlButton {
   margin-left: 105px;
 }
 
-
-/* === Media Modal (画像・動画表示用) === */
+/* 画像・動画モーダル */
 .media-modal {
   position: fixed;
   top: 0; left: 0;
@@ -860,7 +859,4 @@ body.view-control-buttons .viewControlButton {
   color: white;
   cursor: pointer;
 }
-
-
-
 
