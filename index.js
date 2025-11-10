@@ -1,5 +1,5 @@
 /*
- * Marzipano simple zoom + auto return + autorotate resume + auto start
+ * Marzipano zoom + open link + return + autorotate resume
  */
 'use strict';
 
@@ -9,21 +9,15 @@
   var screenfull = window.screenfull;
   var data = window.APP_DATA;
 
-  // --- 基本DOM ---
   var panoElement = document.querySelector('#pano');
-  var sceneNameElement = document.querySelector('#titleBar .sceneName');
-  var sceneListElement = document.querySelector('#sceneList');
-  var sceneElements = document.querySelectorAll('#sceneList .scene');
-  var sceneListToggleElement = document.querySelector('#sceneListToggle');
   var autorotateToggleElement = document.querySelector('#autorotateToggle');
-  var fullscreenToggleElement = document.querySelector('#fullscreenToggle');
+  var sceneListToggleElement = document.querySelector('#sceneListToggle');
+  var sceneListElement = document.querySelector('#sceneList');
 
-  // --- Viewer ---
   var viewer = new Marzipano.Viewer(panoElement, {
     controls: { mouseViewMode: data.settings.mouseViewMode }
   });
 
-  // --- シーン作成 ---
   var scenes = data.scenes.map(function(data) {
     var source = Marzipano.ImageUrlSource.fromString(
       "tiles/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
@@ -36,13 +30,10 @@
     var view = new Marzipano.RectilinearView(data.initialViewParameters, limiter);
     var scene = viewer.createScene({ source, geometry, view, pinFirstLevel: true });
 
-    // --- infoHotspot（クリックで寄る→戻る→自動回転再開） ---
+    // --- infoHotspotクリック → 寄り → リンク開く → 戻る
     data.infoHotspots.forEach(function(hotspot) {
       var wrapper = document.createElement('div');
       wrapper.classList.add('hotspot', 'info-hotspot');
-
-      var header = document.createElement('div');
-      header.classList.add('info-hotspot-header');
 
       var iconWrapper = document.createElement('div');
       iconWrapper.classList.add('info-hotspot-icon-wrapper');
@@ -50,25 +41,32 @@
       icon.src = 'img/info.png';
       icon.classList.add('info-hotspot-icon');
       iconWrapper.appendChild(icon);
+      wrapper.appendChild(iconWrapper);
 
-      header.appendChild(iconWrapper);
-      wrapper.appendChild(header);
+      // 🔗 リンク先を抽出（text 内の最初の a[href]）
+      var linkHref = null;
+      try {
+        var tmp = document.createElement('div');
+        tmp.innerHTML = hotspot.text || '';
+        var a = tmp.querySelector('a[href]');
+        if (a) linkHref = a.href;
+      } catch(e){}
 
-      // ✅ クリック動作
+      // クリック時動作
       wrapper.addEventListener('click', function() {
-        var yaw = hotspot.yaw;
-        var pitch = hotspot.pitch;
-        var before = view.parameters(); // 現在の視点
-        var target = { yaw: yaw, pitch: pitch, fov: Math.PI / 6 }; // 寄り先（fov小）
+        var before = view.parameters();
+        var target = { yaw: hotspot.yaw, pitch: hotspot.pitch, fov: Math.PI/6 };
 
-        stopAutorotate(); // 一時停止
+        stopAutorotate();
 
         // 寄る
         animateView(view, before, target, 1000, function() {
-          // 1.5秒静止してから戻る
+          // 1.5秒停止
           setTimeout(function() {
+            if (linkHref) window.open(linkHref, '_blank'); // 🔗 新タブで開く
+            // 戻る
             animateView(view, view.parameters(), before, 1000, function() {
-              startAutorotate(); // 自動回転再開
+              startAutorotate();
             });
           }, 1500);
         });
@@ -122,15 +120,12 @@
     viewer.setIdleMovement(Infinity);
   }
 
-  // --- SceneListボタン ---
   sceneListToggleElement.addEventListener('click', function(){
     sceneListElement.classList.toggle('enabled');
     sceneListToggleElement.classList.toggle('enabled');
   });
 
-  // --- 初期表示 ---
+  // --- 初期表示＋自動回転開始 ---
   scenes[0].scene.switchTo();
-
-  // ✅ 読み込み直後に自動回転スタート
   startAutorotate();
 })();
