@@ -828,3 +828,41 @@ body.view-control-buttons .viewControlButton {
 .viewControlButton-6 {
   margin-left: 105px;
 }
+/* === ホバーで黒帯＋白文字を表示 === */
+.info-hotspot--hover {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.info-hotspot-icon {
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.5); /* 半透明黒 */
+  padding: 5px;
+  transition: transform 0.3s;
+}
+
+.info-hotspot-label {
+  position: absolute;
+  left: 70px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-10px);
+  background: rgba(0,0,0,0.6);
+  color: #fff;
+  font-size: 15px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.info-hotspot--hover:hover .info-hotspot-label {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
