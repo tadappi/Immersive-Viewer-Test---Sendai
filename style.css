@@ -500,9 +500,9 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
 }
 
 .info-hotspot .info-hotspot-icon {
-  width: 90%;
-  height: 90%;
-  margin: 5%;
+  width: 150%;
+  height: 150%;
+  margin: -25%;
 }
 
 .info-hotspot .info-hotspot-title-wrapper {
