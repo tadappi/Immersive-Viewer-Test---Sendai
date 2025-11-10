@@ -867,3 +867,12 @@ body.view-control-buttons .viewControlButton {
   opacity: 1;
   transform: translateY(-50%) translateX(0);
 }
+/* 強制的に表示（上書き） */
+.info-hotspot--hover .info-hotspot-icon {
+  width: 70px !important;
+  height: 70px !important;
+  margin: 0 !important;
+  display: block !important;
+  opacity: 1 !important;
+  z-index: 9999 !important;
+}
