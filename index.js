@@ -1,5 +1,5 @@
 /*
- * Marzipano simple zoom-on-hotspot-click
+ * Marzipano simple zoom + auto return + autorotate resume + auto start
  */
 'use strict';
 
@@ -36,7 +36,7 @@
     var view = new Marzipano.RectilinearView(data.initialViewParameters, limiter);
     var scene = viewer.createScene({ source, geometry, view, pinFirstLevel: true });
 
-    // --- infoHotspot（クリックでズーム） ---
+    // --- infoHotspot（クリックで寄る→戻る→自動回転再開） ---
     data.infoHotspots.forEach(function(hotspot) {
       var wrapper = document.createElement('div');
       wrapper.classList.add('hotspot', 'info-hotspot');
@@ -54,15 +54,24 @@
       header.appendChild(iconWrapper);
       wrapper.appendChild(header);
 
-      // ✅ クリックで寄る（ズームイン）
+      // ✅ クリック動作
       wrapper.addEventListener('click', function() {
         var yaw = hotspot.yaw;
         var pitch = hotspot.pitch;
-        // 今の視点を取得
-        var before = view.parameters();
-        // 寄り先
-        var target = { yaw: yaw, pitch: pitch, fov: Math.PI / 6 }; // fov小＝ズーム
-        animateView(view, before, target, 1000);
+        var before = view.parameters(); // 現在の視点
+        var target = { yaw: yaw, pitch: pitch, fov: Math.PI / 6 }; // 寄り先（fov小）
+
+        stopAutorotate(); // 一時停止
+
+        // 寄る
+        animateView(view, before, target, 1000, function() {
+          // 1.5秒静止してから戻る
+          setTimeout(function() {
+            animateView(view, view.parameters(), before, 1000, function() {
+              startAutorotate(); // 自動回転再開
+            });
+          }, 1500);
+        });
       });
 
       scene.hotspotContainer().createHotspot(wrapper, { yaw: hotspot.yaw, pitch: hotspot.pitch });
@@ -71,10 +80,10 @@
     return { data, scene, view };
   });
 
-  // --- ゆるやかズームアニメーション関数 ---
+  // --- アニメーション関数 ---
   function easeInOutSine(t){ return 0.5 - 0.5 * Math.cos(Math.PI * t); }
   function lerp(a,b,t){ return a + (b - a) * t; }
-  function animateView(view, from, to, duration){
+  function animateView(view, from, to, duration, done){
     var start = performance.now();
     function step(now){
       var t = Math.min(1, (now - start) / duration);
@@ -85,6 +94,7 @@
         fov: lerp(from.fov,to.fov,k)
       });
       if (t < 1) requestAnimationFrame(step);
+      else if (done) done();
     }
     requestAnimationFrame(step);
   }
@@ -92,19 +102,27 @@
   // --- autorotate ---
   var autorotate = Marzipano.autorotate({ yawSpeed: 0.03, targetPitch: 0, targetFov: Math.PI/2 });
   if (data.settings.autorotateEnabled) autorotateToggleElement.classList.add('enabled');
+
   autorotateToggleElement.addEventListener('click', function(){
     if (autorotateToggleElement.classList.contains('enabled')){
       autorotateToggleElement.classList.remove('enabled');
-      viewer.stopMovement();
-      viewer.setIdleMovement(Infinity);
+      stopAutorotate();
     } else {
       autorotateToggleElement.classList.add('enabled');
-      viewer.startMovement(autorotate);
-      viewer.setIdleMovement(3000, autorotate);
+      startAutorotate();
     }
   });
 
-  // --- SceneList等（デフォルト処理） ---
+  function startAutorotate(){
+    viewer.startMovement(autorotate);
+    viewer.setIdleMovement(3000, autorotate);
+  }
+  function stopAutorotate(){
+    viewer.stopMovement();
+    viewer.setIdleMovement(Infinity);
+  }
+
+  // --- SceneListボタン ---
   sceneListToggleElement.addEventListener('click', function(){
     sceneListElement.classList.toggle('enabled');
     sceneListToggleElement.classList.toggle('enabled');
@@ -112,4 +130,7 @@
 
   // --- 初期表示 ---
   scenes[0].scene.switchTo();
+
+  // ✅ 読み込み直後に自動回転スタート
+  startAutorotate();
 })();
