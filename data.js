@@ -56,7 +56,7 @@ var APP_DATA = {
           "yaw": -2.108442655881049,
           "pitch": 0.2993215890166354,
           "title": "西公園",
-          "text": "<a href='NishiPark.mp4'>NishiPark.mp4</a>"
+          "text": "<a href='Nishi park.mp4'>Nishi park.mp4</a>"
         },
         {
           "yaw": -2.1453412104366745,
