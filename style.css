@@ -828,7 +828,7 @@ body.view-control-buttons .viewControlButton {
 .viewControlButton-6 {
   margin-left: 105px;
 }
-/* === ホバーで黒帯＋白文字を表示 === */
+/* === ホバーで黒帯＋白文字を表示（ピン画像も見える） === */
 .info-hotspot--hover {
   position: relative;
   display: flex;
@@ -836,19 +836,22 @@ body.view-control-buttons .viewControlButton {
   justify-content: center;
 }
 
+/* ピン画像そのもの */
 .info-hotspot-icon {
-  width: 60px;
-  height: 60px;
+  width: 70px;            /* 大きさ調整 */
+  height: 70px;
   cursor: pointer;
   border-radius: 50%;
-  background: rgba(0,0,0,0.5); /* 半透明黒 */
+  object-fit: contain;    /* ← 画像全体を表示 */
+  background: rgba(0,0,0,0.3); /* 背景半透明の黒円 */
   padding: 5px;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease;
 }
 
+/* ホバー時の黒帯テキスト */
 .info-hotspot-label {
   position: absolute;
-  left: 70px;
+  left: 80px;
   top: 50%;
   transform: translateY(-50%) translateX(-10px);
   background: rgba(0,0,0,0.6);
@@ -862,6 +865,7 @@ body.view-control-buttons .viewControlButton {
   transition: all 0.3s ease;
 }
 
+/* ホバー時に横展開 */
 .info-hotspot--hover:hover .info-hotspot-label {
   opacity: 1;
   transform: translateY(-50%) translateX(0);
