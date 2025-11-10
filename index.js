@@ -1,11 +1,10 @@
 /*
- * Marzipano hotspot zoom + link + return + hover title
+ * Marzipano hotspot zoom + link + return + Safari対応版
  */
 'use strict';
 
 (function() {
   var Marzipano = window.Marzipano;
-  var bowser = window.bowser;
   var screenfull = window.screenfull;
   var data = window.APP_DATA;
 
@@ -31,7 +30,7 @@
     var view = new Marzipano.RectilinearView(data.initialViewParameters, limiter);
     var scene = viewer.createScene({ source, geometry, view, pinFirstLevel: true });
 
-    // === infoHotspot: ピン＋ホバータイトル＋クリックズーム ===
+    // === infoHotspot: ピン＋ホバータイトル＋クリックズーム＋リンク ===
     data.infoHotspots.forEach(function(hotspot) {
       var wrapper = document.createElement('div');
       wrapper.classList.add('hotspot', 'info-hotspot', 'info-hotspot--hover');
@@ -42,13 +41,13 @@
       icon.classList.add('info-hotspot-icon');
       wrapper.appendChild(icon);
 
-      // 🔹ホバー時に横展開する黒帯タイトル
+      // ラベル（黒帯）
       var label = document.createElement('div');
       label.classList.add('info-hotspot-label');
       label.innerHTML = hotspot.title;
       wrapper.appendChild(label);
 
-      // 🔗 リンク先抽出
+      // リンク抽出
       var linkHref = null;
       try {
         var tmp = document.createElement('div');
@@ -57,16 +56,24 @@
         if (a) linkHref = a.href;
       } catch(e){}
 
-      // クリック動作：寄る → 開く → 戻る
+      // クリック動作：Safari対応
       wrapper.addEventListener('click', function() {
-        var before = view.parameters();
-        var target = { yaw: hotspot.yaw, pitch: hotspot.pitch, fov: Math.PI/6 };
-
+        if (!linkHref) return;
         stopAutorotate();
 
+        // Safari対策：最初に空のタブを開く
+        var newWin = window.open('', '_blank');
+
+        var before = view.parameters();
+        var target = { yaw: hotspot.yaw, pitch: hotspot.pitch, fov: Math.PI / 6 };
+
+        // 寄る
         animateView(view, before, target, 1000, function() {
+          // 1.5秒後にリンク読み込み
           setTimeout(function() {
-            if (linkHref) window.open(linkHref, '_blank');
+            newWin.location.href = linkHref;
+
+            // 戻す
             animateView(view, view.parameters(), before, 1000, function() {
               startAutorotate();
             });
