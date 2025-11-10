@@ -828,3 +828,39 @@ body.view-control-buttons .viewControlButton {
 .viewControlButton-6 {
   margin-left: 105px;
 }
+
+
+/* === Media Modal (画像・動画表示用) === */
+.media-modal {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+.media-content {
+  position: relative;
+  max-width: 90%;
+  max-height: 90%;
+}
+.media-content img,
+.media-content video {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+}
+.media-content .close-btn {
+  position: absolute;
+  top: -30px;
+  right: -10px;
+  font-size: 40px;
+  color: white;
+  cursor: pointer;
+}
+
+
+
+
