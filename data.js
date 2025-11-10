@@ -62,7 +62,7 @@ var APP_DATA = {
           "yaw": -2.1453412104366745,
           "pitch": 0.340435550032117,
           "title": "大町西公園駅",
-          "text": "Text"
+          "text": "<a href='omachi nishi koen.mp4'>omachi nishi koen.mp4</a>"
         },
         {
           "yaw": 3.1008670285810513,
