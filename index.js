@@ -1,5 +1,5 @@
 /*
- * Marzipano zoom + open link + return + autorotate resume
+ * Marzipano hotspot zoom + link + return + hover title
  */
 'use strict';
 
@@ -18,6 +18,7 @@
     controls: { mouseViewMode: data.settings.mouseViewMode }
   });
 
+  // ===== シーン作成 =====
   var scenes = data.scenes.map(function(data) {
     var source = Marzipano.ImageUrlSource.fromString(
       "tiles/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
@@ -30,20 +31,24 @@
     var view = new Marzipano.RectilinearView(data.initialViewParameters, limiter);
     var scene = viewer.createScene({ source, geometry, view, pinFirstLevel: true });
 
-    // --- infoHotspotクリック → 寄り → リンク開く → 戻る
+    // === infoHotspot: ピン＋ホバータイトル＋クリックズーム ===
     data.infoHotspots.forEach(function(hotspot) {
       var wrapper = document.createElement('div');
-      wrapper.classList.add('hotspot', 'info-hotspot');
+      wrapper.classList.add('hotspot', 'info-hotspot', 'info-hotspot--hover');
 
-      var iconWrapper = document.createElement('div');
-      iconWrapper.classList.add('info-hotspot-icon-wrapper');
+      // ピンアイコン
       var icon = document.createElement('img');
       icon.src = 'img/info.png';
       icon.classList.add('info-hotspot-icon');
-      iconWrapper.appendChild(icon);
-      wrapper.appendChild(iconWrapper);
+      wrapper.appendChild(icon);
 
-      // 🔗 リンク先を抽出（text 内の最初の a[href]）
+      // 🔹ホバー時に横展開する黒帯タイトル
+      var label = document.createElement('div');
+      label.classList.add('info-hotspot-label');
+      label.innerHTML = hotspot.title;
+      wrapper.appendChild(label);
+
+      // 🔗 リンク先抽出
       var linkHref = null;
       try {
         var tmp = document.createElement('div');
@@ -52,19 +57,16 @@
         if (a) linkHref = a.href;
       } catch(e){}
 
-      // クリック時動作
+      // クリック動作：寄る → 開く → 戻る
       wrapper.addEventListener('click', function() {
         var before = view.parameters();
         var target = { yaw: hotspot.yaw, pitch: hotspot.pitch, fov: Math.PI/6 };
 
         stopAutorotate();
 
-        // 寄る
         animateView(view, before, target, 1000, function() {
-          // 1.5秒停止
           setTimeout(function() {
-            if (linkHref) window.open(linkHref, '_blank'); // 🔗 新タブで開く
-            // 戻る
+            if (linkHref) window.open(linkHref, '_blank');
             animateView(view, view.parameters(), before, 1000, function() {
               startAutorotate();
             });
@@ -78,7 +80,7 @@
     return { data, scene, view };
   });
 
-  // --- アニメーション関数 ---
+  // ===== アニメーション関数 =====
   function easeInOutSine(t){ return 0.5 - 0.5 * Math.cos(Math.PI * t); }
   function lerp(a,b,t){ return a + (b - a) * t; }
   function animateView(view, from, to, duration, done){
@@ -97,7 +99,7 @@
     requestAnimationFrame(step);
   }
 
-  // --- autorotate ---
+  // ===== 自動回転 =====
   var autorotate = Marzipano.autorotate({ yawSpeed: 0.03, targetPitch: 0, targetFov: Math.PI/2 });
   if (data.settings.autorotateEnabled) autorotateToggleElement.classList.add('enabled');
 
@@ -125,7 +127,7 @@
     sceneListToggleElement.classList.toggle('enabled');
   });
 
-  // --- 初期表示＋自動回転開始 ---
+  // ===== 初期表示 =====
   scenes[0].scene.switchTo();
   startAutorotate();
 })();
