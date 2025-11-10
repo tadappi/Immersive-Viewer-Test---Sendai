@@ -38,7 +38,7 @@ var APP_DATA = {
           "yaw": 0.012277598582613791,
           "pitch": 0.10752208750394843,
           "title": "仙台駅",
-          "text": "Text"
+          "text": "<a href='sendaieki.jpg'>sendaieki.jpg</a>"
         },
         {
           "yaw": 0.798292065848619,
@@ -56,7 +56,7 @@ var APP_DATA = {
           "yaw": -2.108442655881049,
           "pitch": 0.2993215890166354,
           "title": "西公園",
-          "text": "Text"
+          "text": "<a href='NishiPark.mp4'>NishiPark.mp4</a>"
         },
         {
           "yaw": -2.1453412104366745,
