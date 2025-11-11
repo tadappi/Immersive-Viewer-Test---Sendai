@@ -1,5 +1,5 @@
 /*
- * Marzipano hotspot zoom + link + return + Safari対応版
+ * Marzipano hotspot zoom + delayed Safari-safe link open
  */
 'use strict';
 
@@ -30,7 +30,7 @@
     var view = new Marzipano.RectilinearView(data.initialViewParameters, limiter);
     var scene = viewer.createScene({ source, geometry, view, pinFirstLevel: true });
 
-    // === infoHotspot: ピン＋ホバータイトル＋クリックズーム＋リンク ===
+    // === infoHotspot ===
     data.infoHotspots.forEach(function(hotspot) {
       var wrapper = document.createElement('div');
       wrapper.classList.add('hotspot', 'info-hotspot', 'info-hotspot--hover');
@@ -41,7 +41,7 @@
       icon.classList.add('info-hotspot-icon');
       wrapper.appendChild(icon);
 
-      // ラベル（黒帯）
+      // ラベル
       var label = document.createElement('div');
       label.classList.add('info-hotspot-label');
       label.innerHTML = hotspot.title;
@@ -56,29 +56,36 @@
         if (a) linkHref = a.href;
       } catch(e){}
 
-      // クリック動作：Safari対応
+      // === Safari対応：遅延付き空タブオープン ===
       wrapper.addEventListener('click', function() {
         if (!linkHref) return;
         stopAutorotate();
 
-        // Safari対策：最初に空のタブを開く
-        var newWin = window.open('', '_blank');
-
         var before = view.parameters();
         var target = { yaw: hotspot.yaw, pitch: hotspot.pitch, fov: Math.PI / 6 };
+        var newWin = null;
 
-        // 寄る
+        // 寄りのアニメーション
         animateView(view, before, target, 1000, function() {
-          // 1.5秒後にリンク読み込み
+          // 1.5秒後にリンクを読み込み
           setTimeout(function() {
-            newWin.location.href = linkHref;
+            if (newWin) {
+              newWin.location.href = linkHref;
+            } else {
+              window.open(linkHref, '_blank');
+            }
 
-            // 戻す
+            // 元の位置に戻る
             animateView(view, view.parameters(), before, 1000, function() {
               startAutorotate();
             });
           }, 1500);
         });
+
+        // 🕒 Safari対策：1.0秒後に空タブを開く（ズームが見える）
+        setTimeout(function() {
+          newWin = window.open('', '_blank');
+        }, 1000);
       });
 
       scene.hotspotContainer().createHotspot(wrapper, { yaw: hotspot.yaw, pitch: hotspot.pitch });
