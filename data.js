@@ -35,7 +35,7 @@ var APP_DATA = {
       "linkHotspots": [],
       "infoHotspots": [
         {
-          "yaw": -2.5,
+          "yaw": -0.1,
           "pitch": 0.10752208750394843,
           "title": "仙台駅",
           "text": "<a href='sendaieki.jpg'>sendaieki.jpg</a>"
