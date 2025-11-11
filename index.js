@@ -1,5 +1,5 @@
 /*
- * Marzipano hotspot zoom + delayed Safari-safe link open
+ * Marzipano hotspot zoom + balanced tab timing (Safari/Chrome)
  */
 'use strict';
 
@@ -56,7 +56,7 @@
         if (a) linkHref = a.href;
       } catch(e){}
 
-      // === Safari対応：遅延付き空タブオープン ===
+      // === Safari/Chrome両対応：フォーカス制御安定版 ===
       wrapper.addEventListener('click', function() {
         if (!linkHref) return;
         stopAutorotate();
@@ -65,27 +65,31 @@
         var target = { yaw: hotspot.yaw, pitch: hotspot.pitch, fov: Math.PI / 6 };
         var newWin = null;
 
-        // 寄りのアニメーション
-        animateView(view, before, target, 1000, function() {
-          // 1.5秒後にリンクを読み込み
-          setTimeout(function() {
-            if (newWin) {
-              newWin.location.href = linkHref;
-            } else {
-              window.open(linkHref, '_blank');
-            }
+        // 1️⃣ ズーム開始
+        animateView(view, before, target, 1000);
 
-            // 元の位置に戻る
-            animateView(view, view.parameters(), before, 1000, function() {
-              startAutorotate();
-            });
-          }, 1500);
-        });
-
-        // 🕒 Safari対策：1.0秒後に空タブを開く（ズームが見える）
+        // 2️⃣ 0.9秒後に空タブを開く（Safariポップアップ許可内）
         setTimeout(function() {
-          newWin = window.open('', '_blank');
-        }, 800);
+          try {
+            newWin = window.open('', '_blank');
+          } catch(e) {
+            console.warn('Popup blocked:', e);
+          }
+        }, 900);
+
+        // 3️⃣ 1.5秒後にリンク読込 → 戻る
+        setTimeout(function() {
+          if (newWin) {
+            newWin.location.href = linkHref;
+          } else {
+            window.open(linkHref, '_blank'); // fallback
+          }
+
+          // 元の位置へ戻す（演出的に自然）
+          animateView(view, view.parameters(), before, 1000, function() {
+            startAutorotate();
+          });
+        }, 1500);
       });
 
       scene.hotspotContainer().createHotspot(wrapper, { yaw: hotspot.yaw, pitch: hotspot.pitch });
