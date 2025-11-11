@@ -85,7 +85,7 @@
         // 🕒 Safari対策：1.0秒後に空タブを開く（ズームが見える）
         setTimeout(function() {
           newWin = window.open('', '_blank');
-        }, 1000);
+        }, 800);
       });
 
       scene.hotspotContainer().createHotspot(wrapper, { yaw: hotspot.yaw, pitch: hotspot.pitch });
