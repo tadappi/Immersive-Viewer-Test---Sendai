@@ -15,7 +15,7 @@
   // ====== 一元サイズ設定 ======
   // ピン画像(※info.png)の見た目サイズ。ここだけ変えればOK
   var HOTSPOT_SIZE = 80;     // px
-  var LABEL_GAP    = 12;     // ピン右側のラベルまでの隙間(px)
+  var LABEL_GAP    = 5;     // ピン右側のラベルまでの隙間(px)
 
   // ====== Viewer ======
   var viewer = new Marzipano.Viewer(panoElement, {
