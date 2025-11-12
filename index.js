@@ -1,5 +1,5 @@
 /*
- * Marzipano hotspot zoom + balanced tab timing (Safari/Chrome)
+ * Marzipano hotspot zoom + unified icon size (stable)
  */
 'use strict';
 
@@ -13,11 +13,16 @@
   var sceneListToggleElement = document.querySelector('#sceneListToggle');
   var sceneListElement = document.querySelector('#sceneList');
 
+  // === 統一サイズ設定 ===
+  var HOTSPOT_SIZE = 80; // ピクセル指定（ピン画像の実寸）
+  var LABEL_OFFSET = 12; // ラベルの左右オフセット
+
+  // === ビューア生成 ===
   var viewer = new Marzipano.Viewer(panoElement, {
     controls: { mouseViewMode: data.settings.mouseViewMode }
   });
 
-  // ===== シーン作成 =====
+  // === シーン構築 ===
   var scenes = data.scenes.map(function(data) {
     var source = Marzipano.ImageUrlSource.fromString(
       "tiles/" + data.id + "/{z}/{f}/{y}/{x}.jpg",
@@ -35,16 +40,20 @@
       var wrapper = document.createElement('div');
       wrapper.classList.add('hotspot', 'info-hotspot', 'info-hotspot--hover');
 
-      // ピンアイコン
+      // ピンアイコン（統一サイズ）
       var icon = document.createElement('img');
       icon.src = 'img/info.png';
       icon.classList.add('info-hotspot-icon');
+      icon.style.width = HOTSPOT_SIZE + 'px';
+      icon.style.height = HOTSPOT_SIZE + 'px';
+      icon.style.borderRadius = '50%';
       wrapper.appendChild(icon);
 
       // ラベル
       var label = document.createElement('div');
       label.classList.add('info-hotspot-label');
       label.innerHTML = hotspot.title;
+      label.style.left = (HOTSPOT_SIZE + LABEL_OFFSET) + 'px';
       wrapper.appendChild(label);
 
       // リンク抽出
@@ -56,7 +65,7 @@
         if (a) linkHref = a.href;
       } catch(e){}
 
-      // === Safari/Chrome両対応：フォーカス制御安定版 ===
+      // === クリックイベント ===
       wrapper.addEventListener('click', function() {
         if (!linkHref) return;
         stopAutorotate();
@@ -65,30 +74,22 @@
         var target = { yaw: hotspot.yaw, pitch: hotspot.pitch, fov: Math.PI / 6 };
         var newWin = null;
 
-        // 1️⃣ ズーム開始
+        // ズームイン開始
         animateView(view, before, target, 1000);
 
-        // 2️⃣ 0.9秒後に空タブを開く（Safariポップアップ許可内）
+        // Safari/Chrome対応 — 遅延付き空タブ生成
         setTimeout(function() {
           try {
             newWin = window.open('', '_blank');
-          } catch(e) {
-            console.warn('Popup blocked:', e);
-          }
+          } catch(e) { console.warn('Popup blocked:', e); }
         }, 900);
 
-        // 3️⃣ 1.5秒後にリンク読込 → 戻る
+        // 1.5秒後にURLセット → 戻す
         setTimeout(function() {
-          if (newWin) {
-            newWin.location.href = linkHref;
-          } else {
-            window.open(linkHref, '_blank'); // fallback
-          }
+          if (newWin) newWin.location.href = linkHref;
+          else window.open(linkHref, '_blank');
 
-          // 元の位置へ戻す（演出的に自然）
-          animateView(view, view.parameters(), before, 1000, function() {
-            startAutorotate();
-          });
+          animateView(view, view.parameters(), before, 1000, startAutorotate);
         }, 1500);
       });
 
@@ -98,7 +99,7 @@
     return { data, scene, view };
   });
 
-  // ===== アニメーション関数 =====
+  // === アニメーション ===
   function easeInOutSine(t){ return 0.5 - 0.5 * Math.cos(Math.PI * t); }
   function lerp(a,b,t){ return a + (b - a) * t; }
   function animateView(view, from, to, duration, done){
@@ -117,7 +118,7 @@
     requestAnimationFrame(step);
   }
 
-  // ===== 自動回転 =====
+  // === 自動回転 ===
   var autorotate = Marzipano.autorotate({ yawSpeed: 0.03, targetPitch: 0, targetFov: Math.PI/2 });
   if (data.settings.autorotateEnabled) autorotateToggleElement.classList.add('enabled');
 
@@ -145,7 +146,8 @@
     sceneListToggleElement.classList.toggle('enabled');
   });
 
-  // ===== 初期表示 =====
+  // === 初期表示 ===
   scenes[0].scene.switchTo();
   startAutorotate();
+
 })();
