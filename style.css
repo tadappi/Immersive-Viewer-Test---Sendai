@@ -499,11 +499,11 @@ body.single-scene #sceneList, body.single-scene #sceneListToggle {
   height: 50px;
 }
 
-.info-hotspot .info-hotspot-icon {
+/*.info-hotspot .info-hotspot-icon {
   width: 150%;
   height: 150%;
   margin: -25%;
-}
+} */
 
 .info-hotspot .info-hotspot-title-wrapper {
   position: absolute;
