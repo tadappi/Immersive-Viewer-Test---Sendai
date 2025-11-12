@@ -14,7 +14,7 @@
   var sceneListElement = document.querySelector('#sceneList');
 
   // === 統一サイズ設定 ===
-  var HOTSPOT_SIZE = 80; // ピクセル指定（ピン画像の実寸）
+  var HOTSPOT_SIZE = 50; // ピクセル指定（ピン画像の実寸）
   var LABEL_OFFSET = 12; // ラベルの左右オフセット
 
   // === ビューア生成 ===
