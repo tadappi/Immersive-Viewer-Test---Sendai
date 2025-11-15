@@ -973,6 +973,62 @@ body.view-control-buttons .viewControlButton {
 }
 
 
+/* ===== モーダル（内部ビューア） ===== */
+#modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.45);
+  display: none;
+  align-items: center;
+  justify-content: flex-start;   /* 左側に寄せて開く */
+  z-index: 9999;
+}
+
+#modalOverlay.show {
+  display: flex;
+}
+
+/* 左側に半画面のモーダル */
+#modalBox {
+  width: 40vw;
+  height: 70vh;
+  margin-left: 40px;
+  background: #111;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+/* 閉じるボタン */
+#modalClose {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  z-index: 10000;
+}
+
+/* iframe（ここが重要） */
+#modalFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
 
 
 
