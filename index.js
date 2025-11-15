@@ -1,6 +1,6 @@
 /*
  * Marzipano hotspot → internal modal viewer (iframe)
- * - hotspot 位置ズレゼロ（アンカー方式）
+ * - hotspot ズレゼロ
  * - 動画/画像/外部URLを内部ウインドウで半画面表示
  * - 寄り → モーダル開く → 閉じると戻る & 自動回転再開
  */
@@ -15,7 +15,7 @@
   var sceneListToggleElement = document.querySelector('#sceneListToggle');
   var sceneListElement = document.querySelector('#sceneList');
 
-  // === モーダル要素を index.html に後付けする ===
+  // === モーダル要素を index.html に後付け ===
   var modalOverlay = document.createElement('div');
   modalOverlay.id = 'modalOverlay';
 
@@ -42,6 +42,7 @@
 
   // === Scenes ===
   var scenes = data.scenes.map(function (sceneData) {
+
     var source = Marzipano.ImageUrlSource.fromString(
       "tiles/" + sceneData.id + "/{z}/{f}/{y}/{x}.jpg",
       { cubeMapPreviewUrl: "tiles/" + sceneData.id + "/preview.jpg" }
@@ -58,7 +59,7 @@
     // === infoHotspots ===
     sceneData.infoHotspots.forEach(function (hs) {
 
-      // --- root: Marzipano の transform の受け皿 ---
+      // --- root: Marzipano の transform 用 ---
       var root = document.createElement('div');
 
       // --- anchor：下中央固定（ズレ防止）---
@@ -116,6 +117,7 @@
         label.style.opacity = '1';
         label.style.transform = 'translateY(-100%) translateX(0)';
       });
+
       root.addEventListener('mouseleave', () => {
         label.style.opacity = '0';
         label.style.transform = 'translateY(-100%) translateX(-10px)';
@@ -128,7 +130,7 @@
         tmp.innerHTML = hs.text || "";
         var a = tmp.querySelector("a[href]");
         if (a) linkHref = a.href;
-      } catch (e) { }
+      } catch (e) {}
 
       root.addEventListener('click', function () {
         if (!linkHref) return;
@@ -185,25 +187,31 @@
   }
 
   // === Autorotate ===
-  var autorotate = Marzipano.autorotate({ yawSpeed: 0.03, targetPitch: 0, targetFov: Math.PI / 2 });
-  if (data.settings.autorotateEnabled) autorotateToggleElement.classList.add('enabled');
+  var autorotate = Marzipano.autorotate({
+    yawSpeed: 0.03,
+    targetPitch: 0,
+    targetFov: Math.PI / 2
+  });
+
+  if (data.settings.autorotateEnabled)
+    autorotateToggleElement.classList.add('enabled');
 
   autorotateToggleElement.addEventListener('click', function () {
     if (autorotateToggleElement.classList.contains('enabled')) {
       autorotateToggleElement.classList.remove('enabled');
-      stopAutorrotate();
+      stopAutorotate();
     } else {
       autorotateToggleElement.classList.add('enabled');
-      startAutorrotate();
+      startAutorotate();
     }
   });
 
-  function startAutorrotate() {
+  function startAutorotate() {
     viewer.startMovement(autorotate);
     viewer.setIdleMovement(3000, autorotate);
   }
 
-  function stopAutorrotate() {
+  function stopAutorotate() {
     viewer.stopMovement();
     viewer.setIdleMovement(Infinity);
   }
@@ -214,8 +222,8 @@
     sceneListToggleElement.classList.toggle('enabled');
   });
 
-  // 最初のシーン
+  // 初期
   scenes[0].scene.switchTo();
-  startAutorrotate();
+  startAutorotate();
 
 })();
