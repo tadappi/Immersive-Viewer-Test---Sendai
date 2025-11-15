@@ -3,7 +3,14 @@
 <head>
 <title>Project Title</title>
 <meta charset="utf-8">
-<meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
+<meta name="viewport"
+      content="target-densitydpi=device-dpi,
+               width=device-width,
+               initial-scale=1.0,
+               maximum-scale=1.0,
+               minimum-scale=1.0,
+               user-scalable=no,
+               minimal-ui" />
 <style> @-ms-viewport { width: device-width; } </style>
 
 <link rel="stylesheet" href="vendor/reset.min.css">
@@ -12,38 +19,50 @@
 </head>
 <body class="single-scene">
 
+<!-- ================== -->
+<!-- ★ 360パノラマ本体 -->
+<!-- ================== -->
 <div id="pano"></div>
 
-<!-- ===== Scene List ===== -->
+<!-- =============== -->
+<!-- ★ シーン切替 -->
+<!-- =============== -->
 <div id="sceneList">
   <ul class="scenes">
-    <a href="javascript:void(0)" class="scene" data-id="0-scene">
-      <li class="text">Main Scene</li>
-    </a>
+      <a href="javascript:void(0)" class="scene" data-id="0-sendai-1">
+        <li class="text">SENDAI-1</li>
+      </a>
   </ul>
 </div>
 
-<!-- ===== Title Bar ===== -->
+<!-- =============== -->
+<!-- ★ タイトルバー -->
+<!-- =============== -->
 <div id="titleBar">
   <h1 class="sceneName"></h1>
 </div>
 
-<!-- ===== Controls ===== -->
+<!-- ================= -->
+<!-- ★ 各種UIボタン  -->
+<!-- ================= -->
 <a href="javascript:void(0)" id="autorotateToggle">
   <img class="icon off" src="img/play.png">
-  <img class="icon on" src="img/pause.png">
+  <img class="icon on"  src="img/pause.png">
 </a>
 
 <a href="javascript:void(0)" id="fullscreenToggle">
   <img class="icon off" src="img/fullscreen.png">
-  <img class="icon on" src="img/windowed.png">
+  <img class="icon on"  src="img/windowed.png">
 </a>
 
 <a href="javascript:void(0)" id="sceneListToggle">
   <img class="icon off" src="img/expand.png">
-  <img class="icon on" src="img/collapse.png">
+  <img class="icon on"  src="img/collapse.png">
 </a>
 
+<!-- ========= -->
+<!-- ★ 矢印群 -->
+<!-- ========= -->
 <a href="javascript:void(0)" id="viewUp" class="viewControlButton viewControlButton-1">
   <img class="icon" src="img/up.png">
 </a>
@@ -63,19 +82,30 @@
   <img class="icon" src="img/minus.png">
 </a>
 
-<!-- ===== モーダル ===== -->
-<div id="modal" class="modal">
-  <div class="modal-content">
-    <span id="modalClose" class="modal-close">✕</span>
-    <iframe id="modalIframe" src="" frameborder="0" allowfullscreen></iframe>
+
+<!-- ============================ -->
+<!-- ★ ★ ここが今回の“本丸” ★ ★ -->
+<!-- === 内部モーダル（半画面） === -->
+<!-- ============================ -->
+<div id="modalOverlay">
+  <div id="modalBox">
+    <button id="modalClose">×</button>
+
+    <!-- 動画 or 画像 or 外部URL をこの iframe に表示 -->
+    <iframe id="modalFrame" src=""></iframe>
+
   </div>
 </div>
 
-<!-- ===== Scripts ===== -->
+
+<!-- ================= -->
+<!-- ★ JSライブラリ -->
+<!-- ================= -->
 <script src="vendor/screenfull.min.js"></script>
 <script src="vendor/bowser.min.js"></script>
 <script src="vendor/marzipano.js"></script>
 
+<!-- ===== Data & Logic ===== -->
 <script src="data.js"></script>
 <script src="index.js"></script>
 
