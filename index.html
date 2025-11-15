@@ -5,27 +5,30 @@
 <meta charset="utf-8">
 <meta name="viewport" content="target-densitydpi=device-dpi, width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, minimal-ui" />
 <style> @-ms-viewport { width: device-width; } </style>
+
 <link rel="stylesheet" href="vendor/reset.min.css">
 <link rel="stylesheet" href="style.css">
+
 </head>
-<body class="single-scene ">
+<body class="single-scene">
 
 <div id="pano"></div>
 
+<!-- ===== Scene List ===== -->
 <div id="sceneList">
   <ul class="scenes">
-    
-      <a href="javascript:void(0)" class="scene" data-id="0-sendai-1">
-        <li class="text">SENDAI-1</li>
-      </a>
-    
+    <a href="javascript:void(0)" class="scene" data-id="0-scene">
+      <li class="text">Main Scene</li>
+    </a>
   </ul>
 </div>
 
+<!-- ===== Title Bar ===== -->
 <div id="titleBar">
   <h1 class="sceneName"></h1>
 </div>
 
+<!-- ===== Controls ===== -->
 <a href="javascript:void(0)" id="autorotateToggle">
   <img class="icon off" src="img/play.png">
   <img class="icon on" src="img/pause.png">
@@ -60,9 +63,18 @@
   <img class="icon" src="img/minus.png">
 </a>
 
-<script src="vendor/screenfull.min.js" ></script>
-<script src="vendor/bowser.min.js" ></script>
-<script src="vendor/marzipano.js" ></script>
+<!-- ===== モーダル ===== -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span id="modalClose" class="modal-close">✕</span>
+    <iframe id="modalIframe" src="" frameborder="0" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- ===== Scripts ===== -->
+<script src="vendor/screenfull.min.js"></script>
+<script src="vendor/bowser.min.js"></script>
+<script src="vendor/marzipano.js"></script>
 
 <script src="data.js"></script>
 <script src="index.js"></script>
