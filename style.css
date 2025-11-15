@@ -876,10 +876,8 @@ body.view-control-buttons .viewControlButton {
   opacity: 1 !important;
   z-index: 9999 !important;
 }
-
-
 /* ====================================== */
-/* ★ 内部モーダル（半画面の黒枠+iframe） */
+/* ★ 内部モーダル（共通・フル対応版）   */
 /* ====================================== */
 
 #modalOverlay {
@@ -892,72 +890,69 @@ body.view-control-buttons .viewControlButton {
   backdrop-filter: blur(2px);
   z-index: 99999;
 
-  display: none;        /* 初期は非表示 */
-  align-items: center;  /* 中央寄せ (flex) */
+  display: none;
+  align-items: center;
   justify-content: center;
 
-  transition: opacity 0.25s ease;
   opacity: 0;
+  transition: opacity 0.25s ease;
 }
 
 #modalOverlay.show {
-  display: flex;        /* 表示 */
+  display: flex;
   opacity: 1;
 }
 
-/* ★ モーダル本体（横長の 60% × 60%） */
+/* ★ モーダル本体（60% × 60%） */
 #modalBox {
   width: 60%;
   height: 60%;
-  background: rgba(20,20,20,0.95);
-  border-radius: 10px;
+  background: rgba(15,15,15,0.95);
+  border-radius: 8px;
   overflow: hidden;
   position: relative;
-
   box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+
   animation: modalIn 0.25s ease;
 }
 
-/* モーダル出現アニメ */
 @keyframes modalIn {
   0%   { transform: scale(0.85); opacity: 0; }
-  100% { transform: scale(1.0);  opacity: 1; }
+  100% { transform: scale(1);   opacity: 1; }
 }
 
 /* 閉じるボタン */
 #modalClose {
   position: absolute;
-  top: 6px;
-  right: 8px;
-  background: rgba(0,0,0,0.5);
+  top: 8px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
   border: none;
+  background: rgba(0,0,0,0.5);
   color: #fff;
-  font-size: 28px;
-  line-height: 28px;
-  width: 40px;
-  height: 40px;
-  border-radius: 6px;
+  font-size: 24px;
   cursor: pointer;
-  z-index: 10;
-  transition: background 0.2s ease;
+  border-radius: 6px;
+  z-index: 9999;
 }
 
 #modalClose:hover {
   background: rgba(0,0,0,0.7);
 }
 
-/* iframe（動画・画像・Webページ） */
+/* iframe（動画・画像・Webページ 入る場所） */
 #modalFrame {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   border: none;
   display: block;
 }
 
-
-/* ====================================== */
-/* ★ レスポンシブ（iPad/iPhone 用）      */
-/* ====================================== */
+/* ===== iPad / iPhone 対応 ===== */
 @media (max-width: 799px) {
   #modalBox {
     width: 90%;
@@ -971,66 +966,3 @@ body.view-control-buttons .viewControlButton {
     height: 80%;
   }
 }
-
-
-/* ===== モーダル（内部ビューア） ===== */
-#modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.45);
-  display: none;
-  align-items: center;
-  justify-content: flex-start;   /* 左側に寄せて開く */
-  z-index: 9999;
-}
-
-#modalOverlay.show {
-  display: flex;
-}
-
-/* 左側に半画面のモーダル */
-#modalBox {
-  width: 40vw;
-  height: 70vh;
-  margin-left: 40px;
-  background: #111;
-  border-radius: 8px;
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 0 20px rgba(0,0,0,0.5);
-}
-
-/* 閉じるボタン */
-#modalClose {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 32px;
-  height: 32px;
-  border: none;
-  background: rgba(255,255,255,0.15);
-  color: #fff;
-  font-size: 20px;
-  cursor: pointer;
-  border-radius: 4px;
-  z-index: 10000;
-}
-
-/* iframe（ここが重要） */
-#modalFrame {
-  width: 100%;
-  height: 100%;
-  border: none;
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-
-
-
-
