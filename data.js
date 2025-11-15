@@ -38,19 +38,19 @@ var APP_DATA = {
           "yaw": 0.0,
           "pitch": 0.10752208750394843,
           "title": "仙台駅",
-          "text": "<a href='sendaieki.jpg'>sendaieki.jpg</a>"
+          "text": "<a href='sendaistation.mp4'></a>"
         },
         {
           "yaw": 0.798292065848619,
           "pitch": 0.1164885469657051,
           "title": "五橋中学校<div><br></div>",
-          "text": "Text"
+          "text": "<a href='itsutsubashi.mp4'></a>"
         },
         {
           "yaw": -0.01247549371850809,
           "pitch": 0.32040285593103945,
           "title": "サンモール1番街<div><br></div>",
-          "text": "Text"
+          "text":  "<a href='isun mall.mp4'></a>"
         },
         {
           "yaw": -2.108442655881049,
@@ -62,37 +62,37 @@ var APP_DATA = {
           "yaw": -2.1453412104366745,
           "pitch": 0.340435550032117,
           "title": "大町西公園駅",
-          "text": "<a href='https://youtu.be/k4PDAdRwEDo?si=PkfD8bzucw2ejCW5'>omachi nishi koen</a>"
+          "text": "<a href='omachi nishi koen.mp4'></a>"
         },
         {
           "yaw": 3.1008670285810513,
           "pitch": 0.06759911566953747,
           "title": "仙台城跡",
-          "text": "Text"
+          "text": "<a href='aobajyoshi.mp4'></a>"
         },
         {
           "yaw": -2.5626394877523637,
           "pitch": 0.5723031177704598,
           "title": "コスモス大手町保育園",
-          "text": "Text"
+          "text": "<a href='ootemachi.mp4'></a>"
         },
         {
           "yaw": 0.7620962153651067,
           "pitch": 0.5772828994514754,
           "title": "仙台市立片平丁小学校",
-          "text": "Text"
+          "text": "<a href='katahiracho.mp4'></a>"
         },
         {
           "yaw": -1.1786110097575815,
           "pitch": 0.18748780930097375,
           "title": "東北公済病院",
-          "text": "Text"
+          "text": "<a href='kkr.mp4'></a>"
         },
         {
           "yaw": -1.759940093738301,
           "pitch": 0.18225379689479126,
           "title": "仙台市立立町小学校",
-          "text": "Text"
+          "text": "<a href='tachimachi.mp4'></a>"
         }
       ]
     }
