@@ -50,7 +50,7 @@ var APP_DATA = {
           "yaw": -0.01247549371850809,
           "pitch": 0.32040285593103945,
           "title": "サンモール1番街<div><br></div>",
-          "text":  "<a href='isun mall.mp4'></a>"
+          "text":  "<a href='sun mall.mp4'></a>"
         },
         {
           "yaw": -2.108442655881049,
