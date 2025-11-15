@@ -38,7 +38,7 @@ var APP_DATA = {
           "yaw": 0.0,
           "pitch": 0.10752208750394843,
           "title": "仙台駅",
-          "text": "<a href='sendaistation.mp4'></a>"
+          "text": "<a href='sendaistation.jpg'></a>"
         },
         {
           "yaw": 0.798292065848619,
