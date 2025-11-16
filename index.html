@@ -87,15 +87,14 @@
 <!-- ★ ★ ここが今回の“本丸” ★ ★ -->
 <!-- === 内部モーダル（半画面） === -->
 <!-- ============================ -->
-<div id="modalOverlay">
-  <div id="modalBox">
-    <button id="modalClose">×</button>
-
-    <!-- 動画 or 画像 or 外部URL をこの iframe に表示 -->
-    <iframe id="modalFrame" src=""></iframe>
-
-  </div>
-</div>
+    <!-- ★ 内部モーダル（半画面・video 版） -->
+    <div id="modalOverlay">
+      <div id="modalBox">
+        <button id="modalClose">×</button>
+        <!-- ここで動画を直接再生 -->
+        <video id="modalVideo" controls playsinline></video>
+      </div>
+    </div>
 
 
 <!-- ================= -->
