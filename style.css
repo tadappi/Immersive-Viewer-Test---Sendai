@@ -307,7 +307,7 @@ body.single-scene #sceneListToggle {
 
 #modalClose:hover { background: rgba(255,255,255,0.25); }
 
-#modalFrame {
+#modalVideo {
   position: absolute;
   top: 0;
   left: 0;
@@ -315,6 +315,7 @@ body.single-scene #sceneListToggle {
   height: 100%;
   border: none;
   display: block;
+  background: #000; /* 読み込み中も黒で埋める */
 }
 
 /* スマホ対応 */
